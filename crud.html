@@ -125,10 +125,10 @@
             };
 
             if(newMovie.year < 1888 || newMovie.year > 2026 || Number.isNaN(newMovie.year)){
-                status.textContent = "1888~2026년도 사이 년도를 입력하세요."; year.focus(); return;
+                status.textContent = "1888 ~ 2026년도 사이 년도를 입력하세요."; year.focus(); return;
             }
-            if(newMovie.year >= 0 && newMovie.year <= 10 || Number.isNaN(newMovie.rating)){
-                status.textContent = "숫자를 입력해주세요."; rating.focus(); return;
+            if(newMovie.rating <= 0 || newMovie.rating >= 10 || Number.isNaN(newMovie.rating)){
+                status.textContent = "평점은 0 ~ 10 사이 숫자를 입력해주세요."; rating.focus(); return;
             }
 
             try{
