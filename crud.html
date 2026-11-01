@@ -72,7 +72,7 @@
                 deletebtn.textContent = "삭제";
                 li.appendChild(deletebtn);
                 list.appendChild(li);
-                deletebtn.addEventListener("click", () => {
+                deletebtn.addEventListener("click", async() => {
                     if(!confirm(`"${movie.title}"을(를) 삭제할까요?`)){ return; }
                     try{
                         await deleteMovie(movie.id);
