@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form>
+    <form id="movieForm">
         <h2>영화 등록</h2>
         <label for="title">제목</label>
         <input type="text" id="title" name="title"><br>
@@ -39,9 +39,46 @@
     Array는 화면 표시·검색 등에 사용할 수 있지만 최종 데이터 저장은 MockAPI에서 수행
     -->
     <script>
-        async function loadMovies(){
-            const status = document.querySelector("#status");
+        const status = document.querySelector("#status");
+        const form = document.querySelector("#movieForm");
 
+        async function addMovie(movie){
+            const response = await fetch("https://6adea7084e88f1bba4a53bf7.mockapi.io/movie",{
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(movie)
+            });
+            if(!response.ok){
+                throw new Error(`HTTP ${response.status}`);
+            }
+            await loadMovies();
+        }
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();   
+
+            const newMovie = {
+                title: document.querySelector("#title").value,
+                director: document.querySelector("#director").value,
+                year: Number(document.querySelector("#year").value),
+                genre: document.querySelector("#genre").value,
+                rating: Number(document.querySelector("#rating").value)
+            };
+
+            try{
+                await addMovie(newMovie);
+                form.reset();
+            }
+            catch(error){
+                console.error(error);
+                status.textContent = "등록에 실패했습니다.";
+            }
+
+        });
+        async function loadMovies(){
+            
             try{
                 const response = await fetch(
                     "https://6adea7084e88f1bba4a53bf7.mockapi.io/movie"
