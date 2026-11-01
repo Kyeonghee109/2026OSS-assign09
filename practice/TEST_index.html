@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="module" src="./app.js"></script>
+</head>
+<body>
+    <!-- 입력칸 3개 (이름, 나이, 전공) + 등록 버튼 → 나중에 POST에 사용 -->
+    <form>
+        <h2>회원 등록</h2>
+        <label for="name">이름</label>
+        <input type="text" id="name" name="name"><br>
+
+        <label for="age">나이</label>
+        <input type="text" id="age" name="age"><br>
+
+        <label for="major">전공</label>
+        <input type="text" id="major" name="major"><br>
+
+        <button type="submit">등록</button>
+
+        <ul id="studentList"></ul>
+    </form>
+    
+
+    <script>
+        const student = {
+            name: "Alice",
+            age: 20
+        };
+
+        const jsonText = JSON.stringify(student);
+        const restored = JSON.parse(jsonText);
+
+        console.log(restored.name);
+
+        async function loadUsers(){
+            try{
+                const response = await fetch(
+                    "https://6adea7084e88f1bba4a53bf7.mockapi.io/user"
+                );
+
+                if(!response.ok){
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const users = await response.json();
+
+                console.log(users);
+            }
+            catch(error){
+                constructor(error);
+            }
+        }
+    </script>
+</body>
+</html>

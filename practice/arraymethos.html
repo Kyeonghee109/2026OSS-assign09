@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const score = [ 70, 80, 90 ];
+        score.forEach(score => {
+            console.log(score);
+        });
+        const updated = score.map(score => score + 5);
+        console.log(updated);
+
+
+        const students = [
+            { id: 1, name: "Kim", score: 85 },
+            { id: 2, name: "Lee", score: 92 },
+            { id: 3, name: "Park", score: 78 },
+            { id: 4, name: "Choi", score: 92 }
+        ];
+        
+        //forEach()사용
+        const names = [];
+        students.forEach(function(student){
+            names.push(student.name);
+        });
+        console.log(names);
+
+        //map()사용
+        const name = students.map(function(student){
+            return student.name;
+        });
+        console.log(name);
+
+        const student = students.find(function(student){
+            return student.name === "Lee";
+        });
+        console(student);
+
+        const result = student.filter(function(student){
+            return student.score >= 90;
+        });
+        console.log(result);
+
+        const Delete_result = student.filter(function(student){
+            return student.id !== 2;
+        });
+    </script>
+</body>
+</html>

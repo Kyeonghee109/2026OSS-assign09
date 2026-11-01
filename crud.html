@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <h2>영화 등록</h2>
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title"><br>
+
+        <label for="director">감독</label>
+        <input type="text" id="director" name="director"><br>
+
+        <label for="year">연도</label>
+        <input type="text" id="year" name="year"><br>
+
+        <label for="genre">장르</label>
+        <input type="text" id="genre" name="genre"><br>
+
+        <label for="rating">평점</label>
+        <input type="text" id="rating" name="rating"><br>
+
+        <button type="submit">등록</button>
+    </form>
+
+    <ul id="movieList"></ul>
+    <p id="status"></p>
+
+    <!-- STEP 2. Fetch API로 CRUD 구현
+
+    GET: 시작 시 목록 조회 및 화면 출력
+    POST: Form 데이터를 서버에 추가하고 목록 갱신
+    PATCH 또는 PUT: 기존 데이터를 불러와 수정하고 서버에 반영
+    DELETE: confirm() 후 서버 데이터 삭제
+    모든 요청은 fetch()를 이용하고, async/await와 오류 처리를 적용
+    Array는 화면 표시·검색 등에 사용할 수 있지만 최종 데이터 저장은 MockAPI에서 수행
+    -->
+    <script>
+        async function loadMovies(){
+            const status = document.querySelector("#status");
+
+            try{
+                const response = await fetch(
+                    "https://6adea7084e88f1bba4a53bf7.mockapi.io/movie"
+                );
+
+                if(!response.ok){
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const movies = await response.json();
+                renderMovies(movies);
+            }
+            catch(error){
+                console.error(error);
+                status.textContent = "데이터 요청에 실패했습니다.";
+            }
+        }
+
+        function renderMovies(movies) {
+            const list = document.getElementById("movieList");
+            list.replaceChildren();
+
+            movies.forEach(movie => {
+                const li = document.createElement("li");
+                li.textContent = `${movie.title} - ${movie.director} (${movie.year}) | ${movie.genre} | ${movie.rating}`;
+                list.appendChild(li);
+            });
+        }
+        
+        loadMovies();
+    </script>
+</body>
+</html>
