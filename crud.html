@@ -42,6 +42,7 @@
         const API_URL = "https://6adea7084e88f1bba4a53bf7.mockapi.io/movie";
         const status = document.querySelector("#status");
         const form = document.querySelector("#movieForm");
+        let editingId = null;
 
         async function loadMovies(){
             
@@ -70,7 +71,10 @@
                 li.textContent = `${movie.title} - ${movie.director} (${movie.year}) | ${movie.genre} | ${movie.rating}`;
                 const deletebtn = document.createElement("button");
                 deletebtn.textContent = "삭제";
+                const updatebtn = document.createElement("button");
+                updatebtn.textContent = "수정";
                 li.appendChild(deletebtn);
+                li.appendChild(updatebtn);
                 list.appendChild(li);
                 deletebtn.addEventListener("click", async() => {
                     if(!confirm(`"${movie.title}"을(를) 삭제할까요?`)){ return; }
@@ -81,6 +85,16 @@
                         console.error(error);
                         status.textContent = "삭제에 실패했습니다.";
                     }
+                });
+                updatebtn.addEventListener("click", ()=>{
+                    document.querySelector("#title").value = movie.title;
+                    document.querySelector("#director").value = movie.director;
+                    document.querySelector("#year").value = movie.year;
+                    document.querySelector("#genre").value = movie.genre;
+                    document.querySelector("#rating").value = movie.rating;
+                    
+                    editingId = movie.id;
+                    
                 });
             });
         }
@@ -111,8 +125,14 @@
             };
 
             try{
-                await addMovie(newMovie);
+                if(editingId == null){
+                    await addMovie(newMovie);
+                }
+                else{
+                    await updateMovie(editingId, newMovie);
+                }
                 form.reset();
+                editingId = null;
             }
             catch(error){
                 console.error(error);
