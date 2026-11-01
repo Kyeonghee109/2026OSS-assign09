@@ -26,6 +26,8 @@
         <button type="submit">등록</button>
     </form>
 
+    <input id="search" placeholder="제목 또는 감독 검색"><br>
+
     <ul id="movieList"></ul>
     <p id="status"></p>
 
@@ -42,18 +44,20 @@
         const API_URL = "https://6adea7084e88f1bba4a53bf7.mockapi.io/movie";
         const status = document.querySelector("#status");
         const form = document.querySelector("#movieForm");
+        const search = document.querySelector("#search");
         let editingId = null;
+        let allMovies = [];
 
         async function loadMovies(){
             
             try{
-                const response = await fetch(API_URL);
-
+                const response = await fetch(API_URL);      
                 if(!response.ok){
                     throw new Error(`HTTP ${response.status}`);
                 }
 
                 const movies = await response.json();
+                allMovies = movies;
                 renderMovies(movies);
             }
             catch(error){
@@ -61,6 +65,14 @@
                 status.textContent = "데이터 요청에 실패했습니다.";
             }
         }
+        search.addEventListener("input",()=>{
+            const keyword = search.value.toLowerCase();
+
+            const movie = allMovies.filter((movie) => {
+                return movie.title.toLowerCase().includes(keyword) || movie.director.toLowerCase().includes(keyword);
+            });
+            renderMovies(movie);
+        });
 
         function renderMovies(movies) {
             const list = document.getElementById("movieList");
@@ -127,7 +139,7 @@
             if(newMovie.year < 1888 || newMovie.year > 2026 || Number.isNaN(newMovie.year)){
                 status.textContent = "1888 ~ 2026년도 사이 년도를 입력하세요."; year.focus(); return;
             }
-            if(newMovie.rating <= 0 || newMovie.rating >= 10 || Number.isNaN(newMovie.rating)){
+            if(newMovie.rating < 0 || newMovie.rating > 10 || Number.isNaN(newMovie.rating)){
                 status.textContent = "평점은 0 ~ 10 사이 숫자를 입력해주세요."; rating.focus(); return;
             }
 
@@ -172,7 +184,6 @@
             }
             await loadMovies();
         }
-        
         
         loadMovies();
     </script>
