@@ -68,11 +68,23 @@
             movies.forEach(movie => {
                 const li = document.createElement("li");
                 li.textContent = `${movie.title} - ${movie.director} (${movie.year}) | ${movie.genre} | ${movie.rating}`;
-                list.appendChild(li);
                 const deletebtn = document.createElement("button");
-                list.appendChild(deletebtn);
+                deletebtn.textContent = "삭제";
+                li.appendChild(deletebtn);
+                list.appendChild(li);
+                deletebtn.addEventListener("click", () => {
+                    if(!confirm(`"${movie.title}"을(를) 삭제할까요?`)){ return; }
+                    try{
+                        await deleteMovie(movie.id);
+                    }
+                    catch(error){
+                        console.error(error);
+                        status.textContent = "삭제에 실패했습니다.";
+                    }
+                });
             });
         }
+
         async function addMovie(movie){
             const response = await fetch(API_URL,{
                 method: "POST",
@@ -122,6 +134,17 @@
             }
             await loadMovies();
         }
+
+        async function deleteMovie(id){
+            const response = await fetch(`${API_URL}/${id}`,{
+                method: "DELETE"
+            });
+            if(!response.ok){
+                throw new Error(`HTTP ${response.status}`);
+            }
+            await loadMovies();
+        }
+        
         
         loadMovies();
     </script>
